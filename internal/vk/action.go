@@ -100,3 +100,17 @@ func (vk *VK) actionBtnSayHello(obj events.MessageEventObject) error {
 	}
 	return nil
 }
+
+func (vk *VK) actionShowSnak(obj events.MessageEventObject) error {
+	b := params.NewMessagesSendMessageEventAnswerBuilder()
+	b.PeerID(obj.UserID)
+	b.UserID(obj.UserID)
+	b.EventID(string(obj.EventID))
+	b.EventData("{\n\"type\":\"show_snackbar\",\n\"text\":\"\nHi I am popup message!\"\n}")
+
+	_, err := vk.VKApi.MessagesSendMessageEventAnswer(b.Params)
+	if err != nil {
+		return err
+	}
+	return nil
+}

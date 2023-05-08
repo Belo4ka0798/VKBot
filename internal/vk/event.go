@@ -31,10 +31,9 @@ func (vk *VK) messageNewObject(ctx context.Context, obj events.MessageNewObject)
 		b.Message("\"Home menu - \"/menu\"\n" +
 			"Reset - \"/reset\"\n")
 	default:
+		b.Message("I don't understand this command!")
 		b.Keyboard(vk.btnHome())
-		return
 	}
-	b.Keyboard(vk.btnHome())
 
 	b.PeerID(obj.Message.PeerID)
 	_, err := vk.VKApi.MessagesSend(b.Params)
@@ -61,14 +60,9 @@ func (vk *VK) joinGroupEvent(ctx context.Context, obj events.GroupJoinObject) {
 }
 
 func (vk *VK) messageEventObject(ctx context.Context, obj events.MessageEventObject) {
-	err := vk.btnAnswerEvent(obj)
-	if err != nil {
-		log.Printf("can't AnswerEvent: %v", err)
-		return
-	}
 
 	p := &Payload{}
-	err = json.Unmarshal(obj.Payload, &p)
+	err := json.Unmarshal(obj.Payload, &p)
 	if err != nil {
 		log.Printf("can't unmarshal json: %v", err)
 		return
@@ -115,5 +109,17 @@ func (vk *VK) messageEventObject(ctx context.Context, obj events.MessageEventObj
 			log.Printf("action button home snak error: %v", err)
 			return
 		}
+	case "btn_snak_push":
+		err = vk.actionShowSnak(obj)
+		if err != nil {
+			log.Printf("action button show snak error: %v", err)
+			return
+		}
+		return
+	}
+	err = vk.btnAnswerEvent(obj)
+	if err != nil {
+		log.Printf("can't AnswerEvent: %v", err)
+		return
 	}
 }
