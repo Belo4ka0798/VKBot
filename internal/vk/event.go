@@ -22,14 +22,19 @@ func (vk *VK) messageNewObject(ctx context.Context, obj events.MessageNewObject)
 	b.RandomID(0)
 	switch text {
 	case "/menu":
-		b.Message("Hello! Select a menu item for further work")
-		vk.btnHome(b)
+		b.Message("Select a menu item for further work")
+		b.Keyboard(vk.btnHome())
 	case "/reset":
 		b.Message("Reset Settings!")
 		b.Keyboard(object.NewMessagesKeyboard(false))
+	case "/help":
+		b.Message("\"Home menu - \"/menu\"\n" +
+			"Reset - \"/reset\"\n")
 	default:
+		b.Keyboard(vk.btnHome())
 		return
 	}
+	b.Keyboard(vk.btnHome())
 
 	b.PeerID(obj.Message.PeerID)
 	_, err := vk.VKApi.MessagesSend(b.Params)
@@ -41,13 +46,13 @@ func (vk *VK) messageNewObject(ctx context.Context, obj events.MessageNewObject)
 func (vk *VK) joinGroupEvent(ctx context.Context, obj events.GroupJoinObject) {
 	log.Printf("%d: %s", obj.UserID, obj.JoinType)
 	b := params.NewMessagesSendBuilder()
-	b.Message("Приветствую тебя в нашей группе!\n" +
-		"Home menu - \"/home\"\n" +
+	b.Message("Welcome to our group!\n" +
+		"Home menu - \"/menu\"\n" +
 		"Help - \"/help\"\n" +
 		"Reset - \"/reset\"\n")
 	b.RandomID(0)
 	b.PeerID(obj.UserID)
-	vk.btnHome(b)
+	b.Keyboard(vk.btnHome())
 	_, err := vk.VKApi.MessagesSend(b.Params)
 	if err != nil {
 		log.Printf("cat't send message with join: %v", err)
@@ -58,6 +63,7 @@ func (vk *VK) joinGroupEvent(ctx context.Context, obj events.GroupJoinObject) {
 func (vk *VK) messageEventObject(ctx context.Context, obj events.MessageEventObject) {
 	err := vk.btnAnswerEvent(obj)
 	if err != nil {
+		log.Printf("can't AnswerEvent: %v", err)
 		return
 	}
 
@@ -69,44 +75,44 @@ func (vk *VK) messageEventObject(ctx context.Context, obj events.MessageEventObj
 	}
 
 	switch p.TypeName {
-	case "home_btn_back":
-		err = vk.actionBtnCallHome(obj)
+	case "btn_back_home":
+		err = vk.actionBtnBackHome(obj)
 		if err != nil {
-			log.Printf("action button call3 error: %v", err)
+			log.Printf("action button back home error: %v", err)
 			return
 		}
-	case "say_hello":
-		err = vk.actionSayHello(obj)
+	case "btn_say_hello":
+		err = vk.actionBtnSayHello(obj)
 		if err != nil {
-			log.Printf("action button home error: %v", err)
-			return
-		}
-
-	case "home_btn1":
-		err = vk.actionBtnCall1(obj)
-		if err != nil {
-			log.Printf("action button call1 error: %v", err)
+			log.Printf("action button say hello error: %v", err)
 			return
 		}
 
-	case "home_btn2":
-		err = vk.actionBtnCall2(obj)
+	case "btn_home_hello":
+		err = vk.actionBtnHomeHello(obj)
 		if err != nil {
-			log.Printf("action button call2 error: %v", err)
+			log.Printf("action button home hello error: %v", err)
 			return
 		}
 
-	case "home_btn3":
-		err = vk.actionBtnCall3(obj)
+	case "btn_home_link":
+		err = vk.actionBtnHomeLink(obj)
 		if err != nil {
-			log.Printf("action button call3 error: %v", err)
+			log.Printf("action button home link error: %v", err)
 			return
 		}
 
-	case "home_btn4":
-		err = vk.actionBtnCall4(obj)
+	case "btn_home_locate":
+		err = vk.actionBtnHomeLocate(obj)
 		if err != nil {
-			log.Printf("action button call3 error: %v", err)
+			log.Printf("action button home locate error: %v", err)
+			return
+		}
+
+	case "btn_home_snak":
+		err = vk.actionBtnHomeSnak(obj)
+		if err != nil {
+			log.Printf("action button home snak error: %v", err)
 			return
 		}
 	}

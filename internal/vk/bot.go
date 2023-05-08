@@ -32,6 +32,7 @@ func NewVK(cfg *config.Config) (*VK, error) {
 		LongPoll: lp,
 	}
 	return bot, nil
+
 }
 
 // RegisterEvents new message event

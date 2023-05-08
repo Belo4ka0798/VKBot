@@ -1,54 +1,43 @@
 package vk
 
 import (
-	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/object"
 )
 
-func (vk *VK) btnHome(b *params.MessagesSendBuilder) {
-	keyboard := object.NewMessagesKeyboard(true)
-	keyboard.AddRow()
-	keyboard.AddCallbackButton("Hello", map[string]string{"type": "home_btn1"}, "primary")
-	keyboard.AddCallbackButton("Dev VK", map[string]string{"type": "home_btn2"}, "primary")
-	keyboard.AddCallbackButton("Locate", map[string]string{"type": "home_btn3"}, "primary")
-	keyboard.AddCallbackButton("Snak", map[string]string{"type": "home_btn4"}, "primary")
-	b.Keyboard(keyboard)
+// TODO  Убрать b.Keyboard() из кнопок!
+func (vk *VK) btnHome() *object.MessagesKeyboard {
+	return object.NewMessagesKeyboard(true).
+		AddRow().
+		AddCallbackButton("Hello", map[string]string{"type": "btn_home_hello"}, "primary").
+		AddCallbackButton("Dev VK", map[string]string{"type": "btn_home_link"}, "primary").
+		AddCallbackButton("Locate", map[string]string{"type": "btn_home_locate"}, "primary").
+		AddCallbackButton("Snak", map[string]string{"type": "btn_home_snak"}, "primary")
 }
 
-func (vk *VK) btnHomeBtn1(b *params.MessagesSendBuilder) {
-	keyboard := object.NewMessagesKeyboard(true)
-	keyboard.AddRow()
-	keyboard.AddCallbackButton("Say Hello", map[string]string{"type": "say_hello"}, "primary")
-	keyboard.AddCallbackButton("Go home", map[string]string{"type": "home_btn_back"}, "negative")
-	b.Keyboard(keyboard)
+func (vk *VK) btnHomeHello() *object.MessagesKeyboard {
+	return object.NewMessagesKeyboard(true).
+		AddRow().
+		AddCallbackButton("Say Hello", map[string]string{"type": "btn_say_hello"}, "primary").
+		AddCallbackButton("Go home", map[string]string{"type": "btn_back_home"}, "negative")
 }
 
-func (vk *VK) btnHomeBtn2(b *params.MessagesSendBuilder) {
-	keyboard := object.NewMessagesKeyboard(true)
-	keyboard.AddRow()
-	keyboard.AddOpenLinkButton("https://dev.vk.com", "Open VKApi", "")
-	keyboard.AddCallbackButton("Go home", map[string]string{"type": "home_btn_back"}, "negative")
-	b.Keyboard(keyboard)
+func (vk *VK) btnHomeVKDevLink() *object.MessagesKeyboard {
+	return object.NewMessagesKeyboard(true).
+		AddRow().
+		AddOpenLinkButton("https://dev.vk.com", "Open VKApi", "").
+		AddCallbackButton("Go home", map[string]string{"type": "btn_back_home"}, "negative")
 }
 
-func (vk *VK) btnHomeBtn3(b *params.MessagesSendBuilder) {
-	keyboard := object.NewMessagesKeyboard(false)
-	keyboard.AddRow()
-	keyboard.AddLocationButton("")
-	keyboard.AddCallbackButton("Go home", map[string]string{"type": "home_btn_back"}, "negative")
-	b.Keyboard(keyboard)
+func (vk *VK) btnHomeLocation() *object.MessagesKeyboard {
+	return object.NewMessagesKeyboard(false).
+		AddRow().
+		AddLocationButton("").
+		AddCallbackButton("Go home", map[string]string{"type": "btn_back_home"}, "negative")
 }
 
-//func (vk *VK) btnCall3(msg *params.MessagesSendBuilder) {
-//	msg.Keyboard(object.NewMessagesKeyboard(true).
-//		AddRow().
-//		AddCallbackButton("Say Hello", map[string]string{"type": "call_btn1"}, "primary").
-//		AddCallbackButton("Back", map[string]string{"type": "call_homebtn"}, "negative"))
-//}
-//
-//func (vk *VK) btnCall4(msg *params.MessagesSendBuilder) {
-//	msg.Keyboard(object.NewMessagesKeyboard(true).
-//		AddRow().
-//		AddCallbackButton("Say Hello", map[string]string{"type": "call_btn1"}, "primary").
-//		AddCallbackButton("Back", map[string]string{"type": "call_homebtn"}, "negative"))
-//}
+func (vk *VK) btnHomeSnak() *object.MessagesKeyboard {
+	return object.NewMessagesKeyboard(false).
+		AddRow().
+		AddCallbackButton("Snak", map[string]string{"type": "btn_snak_push"}, "primary").
+		AddCallbackButton("Go home", map[string]string{"type": "btn_back_home"}, "negative")
+}
