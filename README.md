@@ -21,4 +21,4 @@ The bot can respond to multiple commands:
 
 3. ```/reset``` - this command will reset all bot settings.
 
-4. Buttons - buttons for interaction with a bot.
+4. Hello - greet the bot

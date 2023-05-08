@@ -26,13 +26,14 @@ func (vk *VK) messageNewObject(ctx context.Context, obj events.MessageNewObject)
 		b.Keyboard(vk.btnHome())
 	case "/reset":
 		b.Message("Reset Settings!")
-		b.Keyboard(object.NewMessagesKeyboard(false))
+		b.Keyboard(object.NewMessagesKeyboard(true))
 	case "/help":
 		b.Message("\"Home menu - \"/menu\"\n" +
 			"Reset - \"/reset\"\n")
+	case "hello":
+		b.Message("Hello Subscriber! Welcome back!")
 	default:
 		b.Message("I don't understand this command!")
-		b.Keyboard(vk.btnHome())
 	}
 
 	b.PeerID(obj.Message.PeerID)
